@@ -1,66 +1,202 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# EMS Dashboard
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Environment Monitoring System dashboard for monitoring power, temperature, humidity, fire sensors, and smart devices in real time.
 
-## About Laravel
+## 📋 About
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+EMS Dashboard adalah sistem monitoring lingkungan yang dirancang untuk memantau berbagai parameter lingkungan secara real-time, termasuk:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- 🔌 **Power Monitoring** - Pemantauan konsumsi daya listrik
+- 🌡️ **Temperature Sensors** - Monitoring suhu ruangan
+- 💧 **Humidity Sensors** - Pemantauan kelembaban udara
+- 🔥 **Fire Detection** - Sistem deteksi kebakaran
+- 📱 **Smart Devices** - Integrasi dengan perangkat IoT
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠️ Tech Stack
 
-## Learning Laravel
+- **Framework**: Laravel 11
+- **Frontend**: Tailwind CSS, Livewire 3
+- **Database**: MySQL
+- **Authentication**: Laravel Jetstream
+- **Real-time**: Laravel Broadcasting
+- **Testing**: PHPUnit, Pest
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 📦 Requirements
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- PHP >= 8.2
+- Composer
+- Node.js & NPM
+- MySQL >= 8.0
+- Git
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🚀 Installation
 
-## Laravel Sponsors
+1. **Clone repository**
+   ```bash
+   git clone https://github.com/anggahere1112/EMS-Dashboard.git
+   cd EMS-Dashboard
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Install dependencies**
+   ```bash
+   composer install
+   npm install
+   ```
 
-### Premium Partners
+3. **Environment setup**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+4. **Database configuration**
+   
+   Edit file `.env` dan sesuaikan konfigurasi database:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=ems_dashboard
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+   ```
 
-## Contributing
+5. **Run migrations**
+   ```bash
+   php artisan migrate
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. **Build assets**
+   ```bash
+   npm run build
+   # atau untuk development
+   npm run dev
+   ```
 
-## Code of Conduct
+7. **Start server**
+   ```bash
+   php artisan serve
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🔧 Configuration
 
-## Security Vulnerabilities
+### Database Setup
+Buat database MySQL baru:
+```sql
+CREATE DATABASE ems_dashboard;
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Environment Variables
+Konfigurasi utama di file `.env`:
+```env
+APP_NAME="EMS Dashboard"
+APP_ENV=local
+APP_KEY=base64:your-app-key
+APP_DEBUG=true
+APP_URL=http://localhost
 
-## License
+# Database
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ems_dashboard
+DB_USERNAME=root
+DB_PASSWORD=
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Broadcasting (untuk real-time monitoring)
+BROADCAST_DRIVER=pusher
+PUSHER_APP_ID=your-pusher-app-id
+PUSHER_APP_KEY=your-pusher-key
+PUSHER_APP_SECRET=your-pusher-secret
+PUSHER_APP_CLUSTER=mt1
+```
+
+## 📊 Features
+
+### Dashboard Utama
+- Real-time monitoring semua sensor
+- Grafik historis data sensor
+- Alert system untuk kondisi abnormal
+- Status overview semua perangkat
+
+### Sensor Management
+- Konfigurasi sensor baru
+- Kalibrasi sensor
+- Maintenance scheduling
+- Data logging
+
+### User Management
+- Multi-level user access
+- Team collaboration
+- Activity logging
+- Permission management
+
+### Reporting
+- Export data ke Excel/PDF
+- Scheduled reports
+- Custom date range
+- Automated alerts
+
+## 🔄 Development
+
+### Running Tests
+```bash
+# PHPUnit
+php artisan test
+
+# Pest
+./vendor/bin/pest
+```
+
+### Code Style
+```bash
+# Laravel Pint
+./vendor/bin/pint
+```
+
+### Asset Development
+```bash
+# Watch for changes
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## 📱 API Documentation
+
+API endpoints tersedia di `/api/` dengan dokumentasi lengkap:
+
+- `GET /api/sensors` - List semua sensor
+- `GET /api/sensors/{id}/data` - Data sensor specific
+- `POST /api/alerts` - Create alert baru
+- `GET /api/dashboard/summary` - Dashboard summary
+
+## 🤝 Contributing
+
+1. Fork repository
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open Pull Request
+
+## 📄 License
+
+Project ini menggunakan [MIT License](LICENSE).
+
+## 👥 Team
+
+- **Developer**: [@anggahere1112](https://github.com/anggahere1112)
+- **Email**: angga1201putra@gmail.com
+
+## 🆘 Support
+
+Jika mengalami masalah atau memiliki pertanyaan:
+
+1. Check [Issues](https://github.com/anggahere1112/EMS-Dashboard/issues)
+2. Create new issue jika belum ada
+3. Contact developer via email
+
+---
+
+**EMS Dashboard** - Monitoring lingkungan yang cerdas dan real-time 🌟
