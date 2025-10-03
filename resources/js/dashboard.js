@@ -437,7 +437,8 @@ function updateStatusCardStyles() {
     // Reset all cards to default style
     Object.values(cards).forEach(card => {
         if (card) {
-            card.classList.remove('ring-2', 'ring-blue-500', 'ring-green-500', 'ring-red-500', 'ring-yellow-500');
+            card.classList.remove('ring-1', 'ring-blue-300', 'ring-green-300', 'ring-red-300', 'ring-yellow-300');
+            card.classList.remove('dark:ring-blue-700', 'dark:ring-green-700', 'dark:ring-red-700', 'dark:ring-yellow-700');
             card.classList.remove('bg-blue-50', 'bg-green-50', 'bg-red-50', 'bg-yellow-50');
             card.classList.remove('dark:bg-blue-900/20', 'dark:bg-green-900/20', 'dark:bg-red-900/20', 'dark:bg-yellow-900/20');
         }
@@ -450,16 +451,16 @@ function updateStatusCardStyles() {
     if (activeCard) {
         switch (activeStatus) {
             case 'total':
-                activeCard.classList.add('ring-2', 'ring-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+                activeCard.classList.add('ring-1', 'ring-blue-300', 'dark:ring-blue-700', 'bg-blue-50', 'dark:bg-blue-900/20');
                 break;
             case 'active':
-                activeCard.classList.add('ring-2', 'ring-green-500', 'bg-green-50', 'dark:bg-green-900/20');
+                activeCard.classList.add('ring-1', 'ring-green-300', 'dark:ring-green-700', 'bg-green-50', 'dark:bg-green-900/20');
                 break;
             case 'offline':
-                activeCard.classList.add('ring-2', 'ring-red-500', 'bg-red-50', 'dark:bg-red-900/20');
+                activeCard.classList.add('ring-1', 'ring-red-300', 'dark:ring-red-700', 'bg-red-50', 'dark:bg-red-900/20');
                 break;
             case 'warning':
-                activeCard.classList.add('ring-2', 'ring-yellow-500', 'bg-yellow-50', 'dark:bg-yellow-900/20');
+                activeCard.classList.add('ring-1', 'ring-yellow-300', 'dark:ring-yellow-700', 'bg-yellow-50', 'dark:bg-yellow-900/20');
                 break;
         }
     }

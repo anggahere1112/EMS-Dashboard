@@ -33,6 +33,7 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.js',
+        './public/js/**/*.js', 
         ...plugins.map(plugin => `./node_modules/${plugin}/**/*`),
     ],
     darkMode: ['class', '[data-mode="dark"]'],
