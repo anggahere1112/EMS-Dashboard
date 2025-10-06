@@ -12,7 +12,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // Schedule HAOS sync commands
+        $schedule->command('haos:sync')->everyTwoMinutes();
+        $schedule->command('haos:sync --power-outage')->everyFiveSeconds();
+        $schedule->command('haos:sync --smoke-sensor')->everyFiveSeconds(); 
     }
 
     /**

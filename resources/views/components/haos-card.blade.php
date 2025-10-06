@@ -45,19 +45,19 @@
         <div class="flex justify-between gap-1 text-xs">
             <div class="flex-1 bg-slate-50 dark:bg-zink-600 rounded p-1 text-center">
                 <div class="text-slate-500 dark:text-zink-200 text-xs">Memory</div>
-                <div class="font-semibold text-blue-600" id="haosMemory">16.2%</div>
+                <div class="font-semibold text-blue-600" id="haosMemory">0%</div>
             </div>
             <div class="flex-1 bg-slate-50 dark:bg-zink-600 rounded p-1 text-center">
                 <div class="text-slate-500 dark:text-zink-200 text-xs">CPU</div>
-                <div class="font-semibold text-green-600" id="haosCpu">2.3%</div>
+                <div class="font-semibold text-green-600" id="haosCpu">0%</div>
             </div>
             <div class="flex-1 bg-slate-50 dark:bg-zink-600 rounded p-1 text-center">
                 <div class="text-slate-500 dark:text-zink-200 text-xs">Disk</div>
-                <div class="font-semibold text-yellow-600" id="haosDisk">1.8%</div>
+                <div class="font-semibold text-yellow-600" id="haosDisk">0%</div>
             </div>
             <div class="flex-1 bg-slate-50 dark:bg-zink-600 rounded p-1 text-center">
                 <div class="text-slate-500 dark:text-zink-200 text-xs">Uptime</div>
-                <div class="font-semibold text-purple-600" id="haosUptime">5.7d</div>
+                <div class="font-semibold text-purple-600" id="haosUptime">0d</div>
             </div>
         </div>
         
@@ -65,7 +65,7 @@
         <div class="mt-2 text-xs text-slate-500 dark:text-zink-200">
             <span class="inline-flex items-center">
                 <i data-lucide="clock" class="size-3 inline mr-1"></i>
-                Last sync: 2 minutes ago
+                <span id="haosLastSync">Loading...</span>
             </span>
         </div>
     </div>

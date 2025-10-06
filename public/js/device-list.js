@@ -17,27 +17,65 @@ function getDeviceIcon(deviceType) {
 }
 
 // Helper function to get device value based on type and status
-function getDeviceValue(deviceType, status) {
-    if (status === 'offline') {
+function getDeviceValue(device) {
+    // Special handling for Power Outage Detector - check both formats
+    const isPowerOutageDetector = device.deviceType === 'Power Outage Detector';
+    
+    if (isPowerOutageDetector) {
+        // Always show "Power Outage Detected" when offline or warning status
+        if (device.status === 'offline' || device.status === 'warning') {
+            return 'Power Outage Detected';
+        } else if (device.status === 'active') {
+            return 'Normal';
+        }
+    }
+    
+    // General offline handling for other devices
+    if (device.status === 'offline') {
         return 'Offline';
     }
     
+    // Use real API data if available
+    if (device.value !== undefined && device.value !== null) {
+        return device.value + (device.unit ? ' ' + device.unit : '');
+    }
+    
+    // Fallback to dummy data for backward compatibility
     const values = {
         'Sensor Suhu': {
             temperature: Math.floor(Math.random() * 15) + 16 + '°C',
             humidity: Math.floor(Math.random() * 40) + 40 + '%'
         },
-        'Smoke Detector': status === 'active' ? 'Clear' : 'Alert',
+        'Smoke Detector': device.status === 'active' ? 'Clear' : 'Alert',
         'Smart Energy Meter': {
             kwh: (Math.random() * 50 + 10).toFixed(1) + ' kWh',
             voltage: (Math.random() * 20 + 220).toFixed(1) + 'V',
             ampere: (Math.random() * 5 + 5).toFixed(1) + 'A'
         },
-        'Power Outage Detector': status === 'active' ? 'Normal' : (status === 'warning' ? 'Alert' : 'Offline'),
+        'Power Outage Detector': device.status === 'active' ? 'Normal' : (device.status === 'warning' ? 'Power Outage Detected' : 'Power Outage Detected'),
         'Smart Door Lock': Math.random() > 0.5 ? 'Locked' : 'Unlocked',
-        'Smart Plug': Math.random() > 0.5 ? 'On' : 'Off' // Random On/Off for Smart Plug regardless of status
+        'Smart Plug': Math.random() > 0.5 ? 'On' : 'Off'
     };
-    return values[deviceType] || 'N/A';
+    return values[device.deviceType] || 'N/A';
+}
+
+// Helper function to get additional device values for display
+function getAdditionalValues(device) {
+    if (!device.additional_values) {
+        return null;
+    }
+    
+    const additionalHtml = [];
+    Object.keys(device.additional_values).forEach(key => {
+        const value = device.additional_values[key];
+        additionalHtml.push(`
+            <div class="text-xs text-slate-500 dark:text-zink-400 mt-1">
+                ${key.charAt(0).toUpperCase() + key.slice(1)}: ${value.value}${value.unit ? ' ' + value.unit : ''}
+            </div>
+        `);
+    });
+    
+    return additionalHtml.join('');
 }
 
 // Helper function to get card styling based on device type and status
@@ -114,6 +152,67 @@ function updateSearchUI() {
     }
 }
 
+// Fallback function to get filtered devices from dummy data
+function getFilteredDevicesFromDummyData() {
+    // Use dummy data if available, otherwise return empty array
+    if (typeof deviceData === 'undefined') {
+        console.warn('Dummy deviceData not available');
+        return [];
+    }
+    
+    // Get current filter from dashboard API if available
+    let currentFilter = { entity: 'ALL', zone: 'ALL', level: 'ALL', space: 'ALL', location: 'ALL', subLocation: 'ALL', deviceType: 'ALL', status: 'ALL' };
+    let currentSearchTerm = '';
+    
+    if (window.dashboardAPI) {
+        if (typeof window.dashboardAPI.getCurrentFilter === 'function') {
+            currentFilter = window.dashboardAPI.getCurrentFilter();
+        }
+        if (typeof window.dashboardAPI.getCurrentSearch === 'function') {
+            currentSearchTerm = window.dashboardAPI.getCurrentSearch();
+        }
+    }
+    
+    // Filter devices based on current filter and search
+    return deviceData.filter(device => {
+        // Location filters
+        const locationMatch = (currentFilter.entity === 'ALL' || device[0] === currentFilter.entity) &&
+               (currentFilter.zone === 'ALL' || device[1] === currentFilter.zone) &&
+               (currentFilter.level === 'ALL' || device[2] === currentFilter.level) &&
+               (currentFilter.space === 'ALL' || device[3] === currentFilter.space) &&
+               (currentFilter.location === 'ALL' || device[4] === currentFilter.location) &&
+               (currentFilter.subLocation === 'ALL' || device[5] === currentFilter.subLocation) &&
+               (currentFilter.deviceType === 'ALL' || device[6] === currentFilter.deviceType);
+        
+        // Status filter
+        const statusMatch = currentFilter.status === 'ALL' || device[8] === currentFilter.status;
+        
+        // Search filter
+        const searchMatch = !currentSearchTerm || 
+                           device[7].toLowerCase().includes(currentSearchTerm.toLowerCase()) || // Device name
+                           device[6].toLowerCase().includes(currentSearchTerm.toLowerCase());   // Device type
+        
+        return locationMatch && statusMatch && searchMatch;
+    }).map(device => {
+        // Convert dummy data format to API format
+        return {
+            id: Math.random().toString(36).substr(2, 9), // Generate random ID
+            name: device[7],
+            device_type: device[6],
+            entity: device[0],
+            zone: device[1],
+            level: device[2],
+            space: device[3],
+            location: device[4],
+            sub_location: device[5],
+            status: device[8],
+            last_seen: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        };
+    });
+}
+
 // Update filter status display
 function updateFilterStatusDisplay() {
     const statusDisplay = document.getElementById('filterStatusDisplay');
@@ -153,7 +252,7 @@ function updateFilterStatusDisplay() {
 }
 
 // Generate device cards function
-function generateDeviceCards() {
+async function generateDeviceCards() {
     try {
         const container = document.getElementById('deviceCardsContainer');
         if (!container) {
@@ -167,27 +266,24 @@ function generateDeviceCards() {
         // Update filter status display
         updateFilterStatusDisplay();
         
-        // Filter devices based on current filter and search
-        const filteredDevices = deviceData.filter(device => {
-            // Location filters
-            const locationMatch = (currentFilter.entity === 'ALL' || device[0] === currentFilter.entity) &&
-                   (currentFilter.zone === 'ALL' || device[1] === currentFilter.zone) &&
-                   (currentFilter.level === 'ALL' || device[2] === currentFilter.level) &&
-                   (currentFilter.space === 'ALL' || device[3] === currentFilter.space) &&
-                   (currentFilter.location === 'ALL' || device[4] === currentFilter.location) &&
-                   (currentFilter.subLocation === 'ALL' || device[5] === currentFilter.subLocation) &&
-                   (currentFilter.deviceType === 'ALL' || device[6] === currentFilter.deviceType);
-            
-            // Status filter
-            const statusMatch = currentFilter.status === 'ALL' || device[8] === currentFilter.status;
-            
-            // Search filter
-            const searchMatch = !currentSearchTerm || 
-                               device[7].toLowerCase().includes(currentSearchTerm) || // Device name
-                               device[6].toLowerCase().includes(currentSearchTerm);   // Device type
-            
-            return locationMatch && statusMatch && searchMatch;
-        });
+        // Get filtered devices from API
+        let filteredDevices = [];
+        
+        // Check if dashboard API is available
+        if (window.dashboardAPI && typeof window.dashboardAPI.getFilteredDevices === 'function') {
+            try {
+                filteredDevices = await window.dashboardAPI.getFilteredDevices();
+                console.log('Fetched devices from API:', filteredDevices.length);
+            } catch (error) {
+                console.error('Error fetching devices from API:', error);
+                // Fallback to dummy data if API fails
+                filteredDevices = getFilteredDevicesFromDummyData();
+            }
+        } else {
+            console.warn('Dashboard API not available, using dummy data');
+            // Fallback to dummy data
+            filteredDevices = getFilteredDevicesFromDummyData();
+        }
         
         if (filteredDevices.length === 0) {
             container.innerHTML = `
@@ -210,7 +306,24 @@ function generateDeviceCards() {
         const groupedDevices = {};
         
         filteredDevices.forEach(device => {
-            const [entity, zone, level, space, location, subLocation, deviceType, deviceName, status] = device;
+            // Handle both API format and dummy data format
+            let entity, zone, level, space, location, subLocation, deviceType, deviceName, status;
+            
+            if (Array.isArray(device)) {
+                // Dummy data format (array)
+                [entity, zone, level, space, location, subLocation, deviceType, deviceName, status] = device;
+            } else {
+                // API format (object)
+                entity = device.entity;
+                zone = device.zone;
+                level = device.level;
+                space = device.space;
+                location = device.location;
+                subLocation = device.sub_location;
+                deviceType = device.device_type;
+                deviceName = device.name;
+                status = device.status;
+            }
             
             if (!groupedDevices[entity]) {
                 groupedDevices[entity] = {};
@@ -221,13 +334,18 @@ function generateDeviceCards() {
             }
             
             groupedDevices[entity][zone].push({
+                id: device.id || Math.random().toString(36).substr(2, 9),
                 level,
                 space,
                 location,
                 subLocation,
                 deviceType,
                 deviceName,
-                status
+                status,
+                value: device.value,
+                unit: device.unit,
+                additional_values: device.additional_values,
+                lastSeen: device.last_seen || new Date().toISOString()
             });
         });
         
@@ -256,7 +374,8 @@ function generateDeviceCards() {
                 
                 groupedDevices[entity][zone].forEach(device => {
                     const icon = getDeviceIcon(device.deviceType);
-                    const value = getDeviceValue(device.deviceType, device.status);
+                    const value = getDeviceValue(device);
+                    const additionalValues = getAdditionalValues(device);
                     
                     const style = getCardStyle(device.deviceType, device.status);
                     
@@ -275,7 +394,7 @@ function generateDeviceCards() {
                     };
                     
                     html += `
-                        <div class="${style.bgClass} ${style.borderClass} border rounded-xl p-4 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer text-center ${getHoverBorderClass()}" onclick="openDeviceModal('${device.deviceName}', '${device.deviceType}', '${device.status}', '${entity}', '${zone}', '${device.level || ''}', '${device.space || ''}', '${device.location || ''}', '${device.subLocation || ''}')">
+                        <div class="${style.bgClass} ${style.borderClass} border rounded-xl p-4 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer text-center ${getHoverBorderClass()}" onclick="openDeviceModal('${device.id}')">
                             <!-- Status Badge -->
                             <div class="flex justify-end mb-2">
                                 <div class="text-xs px-2 py-1 rounded-full ${
@@ -311,32 +430,15 @@ function generateDeviceCards() {
                             
                             <!-- Value -->
                             <div class="mb-3">
-                                ${
-                                     // Special display for Sensor Suhu and KWH Meter with multiple values
-                                     device.deviceType === 'Sensor Suhu' && typeof value === 'object' ? `
-                                         <div class="text-lg font-bold ${style.valueClass}">
-                                             <span>${value.temperature}</span>
-                                             <span class="text-lg ml-2">${value.humidity}</span>
-                                         </div>
-                                     ` : device.deviceType === 'Smart Energy Meter' && typeof value === 'object' ? `
-                                         <div class="text-sm font-bold ${style.valueClass} space-y-1">
-                                             <div class="text-lg">${value.kwh}</div>
-                                             <div class="flex justify-center space-x-2 opacity-75 text-sm">
-                                                 <span>${value.voltage}</span>
-                                                 <span>${value.ampere}</span>
-                                             </div>
-                                         </div>
-                                     ` : `
-                                         <div class="text-lg font-bold ${
-                                             // Special handling for Smart Plug: gray when Off, green when On
-                                             device.deviceType === 'Smart Plug' && device.status === 'active' && value === 'Off' 
-                                                 ? 'text-slate-700 dark:text-zink-100'
-                                                 : style.valueClass
-                                         }">
-                                             ${value}
-                                         </div>
-                                     `
-                                 }
+                                <div class="text-lg font-bold ${
+                                    // Special handling for Smart Plug: gray when Off, green when On
+                                    device.deviceType === 'Smart Plug' && device.status === 'active' && value === 'Off' 
+                                        ? 'text-slate-700 dark:text-zink-100'
+                                        : style.valueClass
+                                }">
+                                    ${value}
+                                </div>
+                                ${additionalValues ? additionalValues : ''}
                             </div>
                             
                             <!-- Location -->

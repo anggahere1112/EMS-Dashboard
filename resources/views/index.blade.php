@@ -58,7 +58,7 @@
         </div><!--end col-->
         
         <!-- Device Statistics Cards -->
-        <div id="totalDevicesCard" class="col-span-6 card md:col-span-6 lg:col-span-3 xl:col-span-2 2xl:col-span-2 hover:shadow-lg transition-all duration-300 cursor-pointer" onclick="filterByStatus('total')">
+        <div id="totalDevicesCard" class="col-span-6 card md:col-span-6 lg:col-span-3 xl:col-span-2 2xl:col-span-2 hover:shadow-lg transition-all duration-300 cursor-pointer">
             <div class="text-center card-body">
                 <div class="flex items-center justify-center mx-auto rounded-full size-16 bg-blue-100 text-blue-600 dark:bg-blue-500/20 mb-4">
                     <i data-lucide="hard-drive" class="size-8"></i>
@@ -74,7 +74,7 @@
             </div>
         </div><!--end col-->
         
-        <div id="activeDevicesCard" class="col-span-6 card md:col-span-6 lg:col-span-3 xl:col-span-2 2xl:col-span-2 hover:shadow-lg transition-all duration-300 cursor-pointer" onclick="filterByStatus('active')">
+        <div id="activeDevicesCard" class="col-span-6 card md:col-span-6 lg:col-span-3 xl:col-span-2 2xl:col-span-2 hover:shadow-lg transition-all duration-300 cursor-pointer">
             <div class="text-center card-body">
                 <div class="flex items-center justify-center mx-auto rounded-full size-16 bg-green-100 text-green-600 dark:bg-green-500/20 mb-4">
                     <i data-lucide="wifi" class="size-8"></i>
@@ -90,7 +90,7 @@
             </div>
         </div><!--end col-->
         
-        <div id="offlineDevicesCard" class="col-span-6 card md:col-span-6 lg:col-span-3 xl:col-span-2 2xl:col-span-2 hover:shadow-lg transition-all duration-300 cursor-pointer" onclick="filterByStatus('offline')">
+        <div id="offlineDevicesCard" class="col-span-6 card md:col-span-6 lg:col-span-3 xl:col-span-2 2xl:col-span-2 hover:shadow-lg transition-all duration-300 cursor-pointer">
             <div class="text-center card-body">
                 <div class="flex items-center justify-center mx-auto rounded-full size-16 bg-red-100 text-red-600 dark:bg-red-500/20 mb-4">
                     <i data-lucide="wifi-off" class="size-8"></i>
@@ -106,7 +106,7 @@
             </div>
         </div><!--end col-->
         
-        <div id="warningDevicesCard" class="col-span-6 card md:col-span-6 lg:col-span-3 xl:col-span-2 2xl:col-span-2 hover:shadow-lg transition-all duration-300 cursor-pointer" onclick="filterByStatus('warning')">
+        <div id="warningDevicesCard" class="col-span-6 card md:col-span-6 lg:col-span-3 xl:col-span-2 2xl:col-span-2 hover:shadow-lg transition-all duration-300 cursor-pointer">
             <div class="text-center card-body">
                 <div class="flex items-center justify-center mx-auto rounded-full size-16 bg-yellow-100 text-yellow-600 dark:bg-yellow-500/20 mb-4">
                     <i data-lucide="alert-triangle" class="size-8"></i>
@@ -134,8 +134,8 @@
     <!--apexchart js-->
     <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
 
-    <!-- Dashboard JavaScript -->
-    <script src="{{ URL::asset('build/js/dashboard.js') }}"></script>
+    <!-- Dashboard JavaScript - API Version -->
+    <script src="{{ URL::asset('js/dashboard-api.js') }}"></script>
 
     <!-- Device Modal JavaScript -->
     <script src="{{ URL::asset('js/device-modal.js') }}"></script>

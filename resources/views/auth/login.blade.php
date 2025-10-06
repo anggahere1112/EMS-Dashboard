@@ -25,7 +25,7 @@
                         @csrf
                         <div class="mb-3">
                             <x-label for="email" value="{{ __('Email') }}" />
-                            <x-input id="email" type="email" name="email" :value="old('email', 'admin@themesdesign.com')" required autofocus
+                            <x-input id="email" type="email" name="email" :value="old('email', 'it.sysdev@ems.com')" required autofocus
                                 autocomplete="username" placeholder="Enter your email" />
                             <x-input-error for="email" />
                         </div>
@@ -42,7 +42,7 @@
                                 </div>
                             </div>
                             <x-input id="password" class="block mt-1 w-full" type="password" name="password" required
-                                autocomplete="current-password" placeholder="Enter your password" value="12345678" />
+                                autocomplete="current-password" placeholder="Enter your password" value="qwerty123" />
                             <x-input-error for="password" />
                         </div>
                         <div>

@@ -21,5 +21,12 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         
+        $this->call([
+            EntitySeeder::class,
+            HaosInstanceSeeder::class,
+            LocationSeeder::class,
+            DeviceSeeder::class,
+            UserSeeder::class,
+        ]);
     }
 }

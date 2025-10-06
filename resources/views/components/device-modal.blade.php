@@ -61,34 +61,18 @@
                     <!-- Device Logs Tab -->
                     <div class="hidden tab-pane" id="deviceLogs">
                         <div class="space-y-3">
-                            <h6 class="text-sm font-semibold text-slate-700 dark:text-zink-100 mb-3">Recent Activity Logs</h6>
-                            <div class="max-h-64 overflow-y-auto space-y-2">
-                                <div class="flex items-start space-x-3 p-3 bg-slate-50 dark:bg-zink-600 rounded-lg">
-                                    <div class="flex-shrink-0">
-                                        <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                            <h6 class="text-sm font-semibold text-slate-700 dark:text-zink-100 mb-3 flex items-center">
+                                <i data-lucide="activity" class="size-4 mr-2"></i>
+                                Recent Activity Logs
+                            </h6>
+                            <div class="max-h-80 overflow-y-auto space-y-2 pr-2 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-zink-600 scrollbar-track-transparent">
+                                <!-- Logs will be populated by JavaScript -->
+                                <div class="text-center py-8">
+                                    <div class="w-16 h-16 mx-auto mb-4 bg-slate-100 dark:bg-zink-600 rounded-full flex items-center justify-center">
+                                        <i data-lucide="loader-2" class="size-8 text-slate-400 dark:text-zink-400 animate-spin"></i>
                                     </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm text-slate-700 dark:text-zink-100">Device connected successfully</p>
-                                        <p class="text-xs text-slate-500 dark:text-zink-300">2 minutes ago</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start space-x-3 p-3 bg-slate-50 dark:bg-zink-600 rounded-lg">
-                                    <div class="flex-shrink-0">
-                                        <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm text-slate-700 dark:text-zink-100">Status updated to active</p>
-                                        <p class="text-xs text-slate-500 dark:text-zink-300">5 minutes ago</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start space-x-3 p-3 bg-slate-50 dark:bg-zink-600 rounded-lg">
-                                    <div class="flex-shrink-0">
-                                        <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm text-slate-700 dark:text-zink-100">Configuration updated</p>
-                                        <p class="text-xs text-slate-500 dark:text-zink-300">1 hour ago</p>
-                                    </div>
+                                    <h3 class="text-sm font-medium text-slate-700 dark:text-zink-100 mb-2">Loading logs...</h3>
+                                    <p class="text-xs text-slate-500 dark:text-zink-300">Please wait while we fetch the device logs.</p>
                                 </div>
                             </div>
                         </div>
