@@ -2,7 +2,7 @@
 <div class="card mb-5">
     <div class="card-body">
         <div class="flex items-center justify-between mb-4">
-            <h6 class="text-15">Device Filter1</h6>
+            <h6 class="text-15">Device Filter</h6>
             <button id="resetFilterBtn" class="flex items-center px-3 py-1.5 text-sm font-medium text-slate-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-md transition-all duration-200" title="Reset Filter">
                 <i data-lucide="rotate-ccw" class="size-4 mr-1"></i>
                 Reset
